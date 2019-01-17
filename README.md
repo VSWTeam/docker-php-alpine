@@ -2,4 +2,4 @@
 
 ### Base Docker Image
 
-* [php:7.1.21](https://hub.docker.com/_/php/)
+* [php:7.1.26](https://hub.docker.com/_/php/)

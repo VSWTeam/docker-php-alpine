@@ -1,7 +1,7 @@
-FROM php:7.1.21-fpm-alpine3.7
+FROM php:7.1.26-fpm-alpine3.8
 
 RUN apk add --no-cache \
-        postgresql-dev freetype-dev libpng-dev libjpeg-turbo-dev freetype libpng libjpeg-turbo mysql-client \
+        postgresql-dev freetype-dev libpng-dev libjpeg-turbo-dev freetype libpng libjpeg-turbo mysql-client rsync \
   && docker-php-ext-configure gd \
     --with-gd \
     --with-freetype-dir=/usr/include/ \

@@ -1,4 +1,4 @@
-FROM php:7.4.6-fpm-alpine3.11
+FROM php:7.3.14-fpm-alpine3.11
 
 RUN apk add --no-cache \
         libzip-dev postgresql-dev freetype-dev libpng-dev libjpeg-turbo-dev freetype libpng libjpeg-turbo mysql-client rsync \

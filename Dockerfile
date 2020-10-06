@@ -1,4 +1,4 @@
-FROM php:7.3.14-fpm-alpine3.11
+FROM php:7.3.23-fpm-alpine3.12
 
 RUN apk add --no-cache \
         libzip-dev postgresql-dev freetype-dev libpng-dev libjpeg-turbo-dev freetype libpng libjpeg-turbo mysql-client rsync \
@@ -19,10 +19,3 @@ RUN set -ex \
     && docker-php-ext-enable imagick \
     && apk add --no-cache --virtual .imagick-runtime-deps imagemagick \
     && apk del .phpize-deps
-
-# Install Composer & hirak/prestissimo
-RUN apk add --no-cache curl \
-  && curl -sS https://getcomposer.org/installer | php \
-  && chmod +x composer.phar \
-  && mv composer.phar /usr/local/bin/composer \
-  && composer global require hirak/prestissimo

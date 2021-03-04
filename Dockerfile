@@ -26,3 +26,5 @@ RUN apk add --no-cache curl \
   && chmod +x composer.phar \
   && mv composer.phar /usr/local/bin/composer \
   && composer global require hirak/prestissimo
+
+FROM oingo/node:8.11

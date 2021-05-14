@@ -1,13 +1,13 @@
 FROM php:7.4.19-fpm-alpine3.13
 
 RUN apk add --no-cache \
-        libzip-dev postgresql-dev freetype-dev libpng-dev libjpeg-turbo-dev freetype libpng libjpeg-turbo mysql-client rsync \
+        libzip-dev freetype-dev libpng-dev libjpeg-turbo-dev freetype libpng libjpeg-turbo mysql-client rsync \
   && docker-php-ext-configure gd \
     --enable-gd \
     --with-freetype=/usr/include/ \
     --with-jpeg=/usr/include/ && \
   NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
-  && docker-php-ext-install -j${NPROC} gd pdo pdo_mysql pdo_pgsql opcache zip \
+  && docker-php-ext-install -j${NPROC} gd pdo pdo_mysql opcache zip \
   && apk del --no-cache freetype-dev libpng-dev libjpeg-turbo-dev
 
 # Install ImagicK

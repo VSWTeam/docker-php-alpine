@@ -1,4 +1,4 @@
-FROM php:7.4.19-fpm-alpine3.13
+FROM php:7.4.20-fpm-alpine3.13
 
 RUN apk add --no-cache \
         libzip-dev freetype-dev libpng-dev libjpeg-turbo-dev freetype libpng libjpeg-turbo mysql-client rsync \
@@ -24,3 +24,6 @@ RUN apk add --no-cache curl \
   && curl -sS https://getcomposer.org/installer | php \
   && chmod +x composer.phar \
   && mv composer.phar /usr/local/bin/composer
+
+# Install tesseract ocr
+RUN apk add tesseract-ocr-all

@@ -8,7 +8,8 @@ RUN apk add --no-cache \
     --with-jpeg=/usr/include/ && \
   NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
   && docker-php-ext-install -j${NPROC} gd pdo pdo_mysql opcache zip \
-  && apk del --no-cache freetype-dev libpng-dev libjpeg-turbo-dev
+  && apk del --no-cache freetype-dev libpng-dev libjpeg-turbo-dev \
+  && docker-php-ext-install bcmath
 
 # Install ImagicK
 RUN set -ex \

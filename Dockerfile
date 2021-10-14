@@ -1,4 +1,4 @@
-FROM php:7.4.21-fpm-alpine3.13
+FROM php:7.4.24-fpm-alpine3.13
 
 RUN apk add --no-cache \
         libzip-dev freetype-dev libpng-dev libjpeg-turbo-dev freetype libpng libjpeg-turbo mysql-client rsync \
@@ -11,27 +11,28 @@ RUN apk add --no-cache \
   && apk del --no-cache freetype-dev libpng-dev libjpeg-turbo-dev \
   && docker-php-ext-install bcmath
 
-# Install ImagicK
-RUN set -ex \
-    && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS imagemagick-dev libtool \
-    && export CFLAGS="$PHP_CFLAGS" CPPFLAGS="$PHP_CPPFLAGS" LDFLAGS="$PHP_LDFLAGS" \
-    && pecl install imagick-3.4.4 \
-    && docker-php-ext-enable imagick \
-    && apk add --no-cache --virtual .imagick-runtime-deps imagemagick \
-    && apk del .phpize-deps
-
 # Install Composer
 RUN apk add --no-cache curl \
   && curl -sS https://getcomposer.org/installer | php \
   && chmod +x composer.phar \
   && mv composer.phar /usr/local/bin/composer
 
-# Install tesseract ocr
-# RUN apk add tesseract-ocr
-RUN set -xe \
-    && apk add --no-cache \
-        tesseract-ocr \
-        tesseract-ocr-data-chi_sim \
-        tesseract-ocr-data-chi_tra \
-        tesseract-ocr-data-jpn \
-        tesseract-ocr-data-kor
+# Install essential build tools
+RUN apk add --no-cache \
+    git \
+    autoconf \
+    g++ \
+    make \
+    openssl-dev
+
+# Install xdebug
+RUN docker-php-source extract \
+    && pecl install opcache xdebug \
+    && echo "xdebug.remote_enable=on\n" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_autostart=on\n" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_port=9000\n" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_handler=dbgp\n" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_connect_back=1\n" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && docker-php-ext-enable opcache xdebug \
+    && docker-php-source delete \
+    && rm -rf /tmp/*

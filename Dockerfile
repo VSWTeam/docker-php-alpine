@@ -20,9 +20,8 @@ RUN set -ex \
     && apk add --no-cache --virtual .imagick-runtime-deps imagemagick \
     && apk del .phpize-deps
 
-# Install Composer & hirak/prestissimo
+# Install Composer
 RUN apk add --no-cache curl \
   && curl -sS https://getcomposer.org/installer | php \
   && chmod +x composer.phar \
-  && mv composer.phar /usr/local/bin/composer \
-  && composer global require hirak/prestissimo
+  && mv composer.phar /usr/local/bin/composer

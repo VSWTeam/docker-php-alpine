@@ -1,4 +1,4 @@
-FROM php:7.4.19-fpm-alpine3.13
+FROM php:7.4.22-fpm-alpine3.13
 
 RUN apk add --no-cache \
         libzip-dev freetype-dev libpng-dev libjpeg-turbo-dev freetype libpng libjpeg-turbo mysql-client rsync \
@@ -18,3 +18,21 @@ RUN set -ex \
     && docker-php-ext-enable imagick \
     && apk add --no-cache --virtual .imagick-runtime-deps imagemagick \
     && apk del .phpize-deps
+
+# Install DCMTK
+RUN apk update \
+    && apk add --no-cache libstdc++ g++ make git \
+    && git clone https://github.com/DCMTK/dcmtk.git \
+    && cd dcmtk \
+    && git checkout DCMTK-3.6.7 \
+    && cd config \
+    && ./rootconf \
+    && cd .. \
+    && ./configure --ignore-deprecation \
+    && make all \
+    && make install \
+    && make distclean \
+    && cd .. \
+    && rm -r dcmtk \
+    && apk del g++ make git \
+    && rm /var/cache/apk/*

@@ -1,14 +1,23 @@
 FROM php:7.4.22-fpm-alpine3.13
 
 RUN apk add --no-cache \
-        libzip-dev freetype-dev libpng-dev libjpeg-turbo-dev freetype libpng libjpeg-turbo mysql-client rsync \
-  && docker-php-ext-configure gd \
-    --enable-gd \
-    --with-freetype=/usr/include/ \
-    --with-jpeg=/usr/include/ && \
-  NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
-  && docker-php-ext-install -j${NPROC} gd pdo pdo_mysql opcache zip \
-  && apk del --no-cache freetype-dev libpng-dev libjpeg-turbo-dev
+        curl \
+        libzip-dev \
+        freetype-dev \
+        libpng-dev \
+        libjpeg-turbo-dev \
+        freetype \
+        libpng \
+        libjpeg-turbo \
+        mysql-client \
+        rsync \
+    && docker-php-ext-configure gd \
+        --enable-gd \
+        --with-freetype=/usr/include/ \
+        --with-jpeg=/usr/include/ \
+    && NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
+    && docker-php-ext-install -j${NPROC} gd pdo pdo_mysql opcache zip \
+    && apk del --no-cache freetype-dev libpng-dev libjpeg-turbo-dev
 
 # Install ImagicK
 RUN set -ex \
@@ -35,4 +44,12 @@ RUN apk update \
     && cd .. \
     && rm -r dcmtk \
     && apk del g++ make git \
-    && rm /var/cache/apk/*
+    && rm /var/cache/apk/* \
+
+    # Install Composer
+    && curl -sS https://getcomposer.org/installer | php \
+    && chmod +x composer.phar \
+    && mv composer.phar /usr/local/bin/composer \
+
+    # Clean
+    && rm -rf /usr/src/php*

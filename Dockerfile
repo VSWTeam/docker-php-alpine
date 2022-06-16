@@ -1,4 +1,4 @@
-FROM php:7.4.22-fpm-alpine3.13
+FROM php:7.4.23-fpm-alpine3.13
 
 RUN apk add --no-cache \
         curl \

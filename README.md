@@ -2,4 +2,4 @@
 
 ## Base Docker Image
 
-* [php:7.4.21-fpm-alpine3.13](https://hub.docker.com/_/php/)
+* [php:7.4.30-fpm-alpine3.15](https://hub.docker.com/_/php/)

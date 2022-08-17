@@ -2,14 +2,18 @@ FROM php:7.4.30-fpm-alpine3.15
 
 RUN apk add --no-cache \
         libzip-dev freetype-dev libpng-dev libjpeg-turbo-dev freetype libpng libjpeg-turbo mysql-client rsync \
+        exiftool \
+  && docker-php-ext-configure exif \
   && docker-php-ext-configure gd \
     --enable-gd \
     --with-freetype=/usr/include/ \
     --with-jpeg=/usr/include/ && \
   NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
   && docker-php-ext-install -j${NPROC} gd pdo pdo_mysql opcache zip \
-  && apk del --no-cache freetype-dev libpng-dev libjpeg-turbo-dev \
-  && docker-php-ext-install bcmath
+  && docker-php-ext-install bcmath \
+  && docker-php-ext-install exif \
+  && docker-php-ext-enable exif \
+  && apk del --no-cache freetype-dev libpng-dev libjpeg-turbo-dev
 
 # Install ImagicK
 RUN set -ex \

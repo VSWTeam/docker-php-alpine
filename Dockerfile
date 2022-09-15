@@ -55,3 +55,20 @@ RUN apk add --no-cache --virtual \
 
     # Clean
     && rm -rf /usr/src/php*
+
+# Install essential build tools
+RUN apk add --no-cache \
+    git \
+    autoconf \
+    g++ \
+    make \
+    openssl-dev
+
+# Install xdebug
+RUN pecl install opcache xdebug \
+    && echo "xdebug.mode=debug\n" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.start_with_request=yes\n" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.client_port=9000\n" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.client_host=host.docker.internal\n" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && docker-php-ext-enable opcache xdebug \
+    && rm -rf /tmp/*

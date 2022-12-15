@@ -25,3 +25,13 @@ RUN apk add --no-cache curl \
   && curl -sS https://getcomposer.org/installer | php \
   && chmod +x composer.phar \
   && mv composer.phar /usr/local/bin/composer
+
+# Install tesseract ocr
+# RUN apk add tesseract-ocr
+RUN set -xe \
+    && apk add --no-cache \
+        tesseract-ocr \
+        tesseract-ocr-data-chi_sim \
+        tesseract-ocr-data-chi_tra \
+        tesseract-ocr-data-jpn \
+        tesseract-ocr-data-kor

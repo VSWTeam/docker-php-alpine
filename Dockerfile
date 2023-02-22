@@ -1,4 +1,4 @@
-FROM php:7.4.24-fpm-alpine3.13
+FROM php:7.4.32-fpm-alpine3.15
 
 RUN apk add --no-cache \
         curl \
@@ -16,7 +16,8 @@ RUN apk add --no-cache \
         --with-freetype=/usr/include/ \
         --with-jpeg=/usr/include/ \
     && NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
-    && docker-php-ext-install -j${NPROC} gd pdo pdo_mysql opcache zip \
+    && docker-php-ext-configure pcntl --enable-pcntl \
+    && docker-php-ext-install -j${NPROC} gd pdo pdo_mysql opcache zip pcntl \
     && apk del --no-cache freetype-dev libpng-dev libjpeg-turbo-dev
 
 # Install ImagicK

@@ -2,12 +2,17 @@ FROM php:8.0.29-fpm-alpine3.16
 
 RUN apk add --no-cache \
         libzip-dev freetype-dev libpng-dev libjpeg-turbo-dev freetype libpng libjpeg-turbo mysql-client rsync \
+        exiftool \
+  && docker-php-ext-configure exif \
   && docker-php-ext-configure gd \
     --enable-gd \
     --with-freetype=/usr/include/ \
     --with-jpeg=/usr/include/ && \
   NPROC=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1) \
   && docker-php-ext-install -j${NPROC} gd pdo pdo_mysql opcache zip \
+  && docker-php-ext-install bcmath \
+  && docker-php-ext-install exif \
+  && docker-php-ext-enable exif \
   && apk del --no-cache freetype-dev libpng-dev libjpeg-turbo-dev
 
 # Install ImagicK
@@ -18,9 +23,6 @@ RUN set -ex \
     && docker-php-ext-enable imagick \
     && apk add --no-cache --virtual .imagick-runtime-deps imagemagick \
     && apk del .phpize-deps
-
-# Dependency of PHP client for Google Analytics Data libraray
-RUN docker-php-ext-install bcmath
 
 # Install Composer
 RUN apk add --no-cache curl \

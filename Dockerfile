@@ -1,4 +1,4 @@
-FROM php:8.0.9-fpm-alpine3.14
+FROM php:8.0.29-fpm-alpine3.16
 
 RUN apk add --no-cache \
         libzip-dev freetype-dev libpng-dev libjpeg-turbo-dev freetype libpng libjpeg-turbo mysql-client rsync \
@@ -18,6 +18,9 @@ RUN set -ex \
     && docker-php-ext-enable imagick \
     && apk add --no-cache --virtual .imagick-runtime-deps imagemagick \
     && apk del .phpize-deps
+
+# Dependency of PHP client for Google Analytics Data libraray
+RUN docker-php-ext-install bcmath
 
 # Install Composer
 RUN apk add --no-cache curl \

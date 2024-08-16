@@ -1,4 +1,4 @@
-FROM php:8.0.19-fpm-alpine3.15
+FROM php:8.0.30-fpm-alpine3.16
 
 RUN apk add --no-cache \
         curl \
@@ -24,6 +24,7 @@ RUN apk add --no-cache --virtual \
         libwebp-dev \
         libzip-dev \
         make \
+        mariadb-connector-c \
         zlib-dev \
 
     # Install extension
